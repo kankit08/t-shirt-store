@@ -7,6 +7,12 @@ const express = require("express");
 // creating app
 const app = express();
 
+// Swagger documentation
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
+const swaggerDocument = YAML.load("./swagger.yaml");
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 //importing morgan
 const morgan = require("morgan");
 
