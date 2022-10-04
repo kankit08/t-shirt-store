@@ -41,4 +41,4 @@ Any contributions you make are greatly appreciated
 
 ## Contact
 
-Reach me out at [email](kankit08@gmail.com)
+Reach me out at: kankit08@gmail.com
