@@ -10,11 +10,19 @@ const app = express();
 //importing morgan
 const morgan = require("morgan");
 
+// importing cookies and file upload
+const cookieParser = require("cookie-parser");
+const fileUpload = require("express-fileupload");
+
 //morgan middleware
 app.use(morgan("tiny"));
 
+// cookie-parser and file upload middlewares
+app.use(cookieParser());
+app.use(fileUpload());
+
 // regular middlewares
-app.use(express.json);
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // importing routes
