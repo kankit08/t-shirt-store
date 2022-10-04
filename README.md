@@ -7,12 +7,17 @@ We have created this project only for the Backend point of view
 
 ### **To start with this project:**
 
-1. Downlaod the repo first
-2. Do npm i
+## Installation
 
-### **To run this project:**
-
-npm run start
+1. Downlaod the repo from [here](https://github.com/kankit08/t-shirt-store.git)
+2. Run this command in the terminal to install all packages:
+   ```bash
+   npm i
+   ```
+3. To run this project:
+   ```bash
+   npm run start
+   ```
 
 And you are ready to go
 
