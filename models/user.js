@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-const userSchema = new mongoose({
+const userSchema = new Schema({
   firstname: {
     type: String,
     required: [true, "Please enter you FirstName"],
