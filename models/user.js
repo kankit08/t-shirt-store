@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose({
   firstname: {
@@ -48,6 +49,14 @@ const userSchema = new mongoose({
     type: Date,
     default: Date.now,
   },
+});
+
+// encrypt password before save
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  this.password = bcrypt.hash(this.password, 10);
 });
 
 module.exports = mongoose.model("user", userSchema);
