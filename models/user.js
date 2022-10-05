@@ -51,12 +51,19 @@ const userSchema = new mongoose({
   },
 });
 
-// encrypt password before save
+// encrypt password before save -- Hooks
+
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
   this.password = bcrypt.hash(this.password, 10);
 });
+
+// validate the password
+
+userSchema.methods.isValidatedPassword = async function (userSendPassword) {
+  return await bcrypt.compare(userSendPassword, this.password);
+};
 
 module.exports = mongoose.model("user", userSchema);
