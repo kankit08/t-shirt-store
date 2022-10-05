@@ -6,15 +6,10 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 const userSchema = new Schema({
-  firstname: {
+  name: {
     type: String,
     required: [true, "Please enter you FirstName"],
     maxlength: [35, "FirstName should be under 35 characters"],
-  },
-  lastname: {
-    type: String,
-    required: [true, "Please enter you LastName"],
-    maxlength: [35, "LastName should be under 35 characters"],
   },
   email: {
     type: String,
