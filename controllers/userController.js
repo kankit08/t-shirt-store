@@ -52,9 +52,7 @@ exports.login = bigPromise(async (req, res, next) => {
 
   // if user is not register
   if (!user) {
-    return next(
-      new customError("Email or password doesn't match or exist", 400)
-    );
+    return next(new customError("Email doesn't match or exist", 400));
   }
 
   // Match the password
@@ -92,7 +90,7 @@ exports.forgotPassword = bigPromise(async (req, res, next) => {
 
   const myUrl = `${req.protocol}://${req.get(
     "host"
-  )}/password/reset/${forgotToken}`;
+  )}/api/v1/password/reset/${forgotToken}`;
 
   const message = `Copy and paste this url in your browser to reset password \n\n ${myUrl}`;
 
@@ -113,4 +111,35 @@ exports.forgotPassword = bigPromise(async (req, res, next) => {
 
     return next(new customError(error.message, 500));
   }
+});
+
+// Password reset Route
+exports.passwordReset = bigPromise(async (req, res, next) => {
+  const token = req.params.token;
+
+  const encryToken = crypto.createHash("sha256").update(token).digest("hex");
+
+  const user = await User.findOne({
+    encryToken,
+    forgotPasswordExpiry: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(new customError("Token is invalid or expired", 400));
+  }
+
+  if (req.body.password !== req.body.confirmPassword) {
+    return next(
+      new customError("Password & Confirm Pasword do not match", 400)
+    );
+  }
+
+  user.password = req.body.password;
+
+  user.forgotPasswordToken = undefined;
+  user.forgotPasswordExpiry = undefined;
+  await user.save();
+
+  // Send a JSON response or send token
+  cookieToken(user, res);
 });
