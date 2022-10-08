@@ -4,7 +4,8 @@ const customError = require("../utils/customError");
 const cookieToken = require("../utils/cookieToken");
 const fileupload = require("express-fileupload");
 const cloudinary = require("cloudinary");
-const { findOne } = require("../models/user");
+const mailHelper = require("../utils/emailHelper");
+const crypto = require("crypto");
 
 // SignUp Route
 exports.signup = bigPromise(async (req, res, next) => {
@@ -77,4 +78,39 @@ exports.logout = bigPromise(async (req, res, next) => {
     success: true,
     message: "Logout Successfully",
   });
+});
+
+// Forgot Password Route
+exports.forgotPassword = bigPromise(async (req, res, next) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    return next(new customError("Email not found as registerd", 400));
+  }
+  const forgotToken = user.getForgotPasswordToken();
+  await user.save({ validateBeforeSave: false });
+
+  const myUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/password/reset/${forgotToken}`;
+
+  const message = `Copy and paste this url in your browser to reset password \n\n ${myUrl}`;
+
+  try {
+    await mailHelper({
+      email: user.email,
+      subject: user.email,
+      message,
+    });
+    res.status(200).json({
+      success: true,
+      message: "Email sent successfully",
+    });
+  } catch (error) {
+    user.forgotPasswordToken = undefined;
+    user.forgotPasswordExpiry = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    return next(new customError(error.message, 500));
+  }
 });
