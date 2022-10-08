@@ -92,7 +92,7 @@ exports.forgotPassword = bigPromise(async (req, res, next) => {
     "host"
   )}/api/v1/password/reset/${forgotToken}`;
 
-  const message = `Copy and paste this url in your browser to reset password \n\n ${myUrl}`;
+  const message = ` T-Shirt Store: Password Reset Mail \n\n Copy and paste this url in your browser to reset password \n\n ${myUrl}`;
 
   try {
     await mailHelper({
@@ -142,4 +142,13 @@ exports.passwordReset = bigPromise(async (req, res, next) => {
 
   // Send a JSON response or send token
   cookieToken(user, res);
+});
+
+// User dashboard
+exports.getLoggedInUserDetails = bigPromise(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  res.status(200).json({
+    success: true,
+    user,
+  });
 });
