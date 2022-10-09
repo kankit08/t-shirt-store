@@ -260,3 +260,24 @@ exports.adminUpdateOneUserDetails = bigPromise(async (req, res, next) => {
     success: true,
   });
 });
+
+// Admin can delete any user
+exports.adminDeleteAnyUser = bigPromise(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  // If user is unavailable or not register
+  if (!user) {
+    return next(new customError("No such user found", 401));
+  }
+
+  // first delete the photo:
+  const imageId = user.photo.id;
+  await cloudinary.v2.uploader.destroy(imageId);
+
+  // deleting the user
+  await user.remove();
+
+  res.status(200).json({
+    success: true,
+  });
+});
