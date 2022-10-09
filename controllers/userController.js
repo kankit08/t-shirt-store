@@ -242,3 +242,21 @@ exports.adminGetOneUser = bigPromise(async (req, res, next) => {
     user,
   });
 });
+
+// Admin can update any user's details
+exports.adminUpdateOneUserDetails = bigPromise(async (req, res, next) => {
+  const newData = {
+    name: req.body.name,
+    email: req.body.email,
+    role: req.body.role,
+  };
+
+  const user = await User.findByIdAndUpdate(req.params.id, newData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+  res.status(200).json({
+    success: true,
+  });
+});
