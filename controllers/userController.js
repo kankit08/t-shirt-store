@@ -207,3 +207,14 @@ exports.updateUserDetails = bigPromise(async (req, res, next) => {
     success: true,
   });
 });
+
+// Admin route -- to access all users
+exports.admin = bigPromise(async (req, res, next) => {
+  // to access all uers
+
+  const users = await User.find();
+  res.status(200).json({
+    success: true,
+    users,
+  });
+});

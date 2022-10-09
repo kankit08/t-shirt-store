@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { isLoggedIn } = require("../middlewares/user");
+const { isLoggedIn, customRole } = require("../middlewares/user");
 
 //importig controller home
 const {
@@ -12,6 +12,7 @@ const {
   getLoggedInUserDetails,
   changePassword,
   updateUserDetails,
+  admin,
 } = require("../controllers/userController");
 
 //routes
@@ -23,6 +24,9 @@ router.route("/password/reset/:token").post(passwordReset);
 router.route("/userdashboard").get(isLoggedIn, getLoggedInUserDetails);
 router.route("/password/update").post(isLoggedIn, changePassword);
 router.route("/userdashboard/update").post(isLoggedIn, updateUserDetails);
+
+// ADMIN ROUTE
+router.route("/admin/users").get(isLoggedIn, customRole("admin"), admin);
 
 // exporting route
 module.exports = router;
