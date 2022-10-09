@@ -32,7 +32,11 @@ Soon will be deployed on the server and will also update here the link
 
 #### **Swagger documentation is in progress**
 
-The Swagger documentation is available at: [swagger](http://localhost:8000/api-docs/)
+Now the Swagger documentation is available at:
+
+```bash
+http://localhost:8000/api-docs/
+```
 
 ## Contribute
 
