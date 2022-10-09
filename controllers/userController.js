@@ -208,7 +208,7 @@ exports.updateUserDetails = bigPromise(async (req, res, next) => {
   });
 });
 
-// Admin route -- to access all users
+// Admin route -- to access all data
 exports.admin = bigPromise(async (req, res, next) => {
   // to access all uers
 
@@ -216,5 +216,29 @@ exports.admin = bigPromise(async (req, res, next) => {
   res.status(200).json({
     success: true,
     users,
+  });
+});
+
+// Manager route -- to access only users
+exports.manager = bigPromise(async (req, res, next) => {
+  // to access all uers
+
+  const users = await User.find({ role: "user" });
+  res.status(200).json({
+    success: true,
+    users,
+  });
+});
+
+// Admin to get any user details
+exports.adminGetOneUser = bigPromise(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    next(new customError("No user found", 400));
+  }
+  res.status(200).json({
+    success: true,
+    user,
   });
 });
