@@ -14,6 +14,23 @@ class WhereClause {
     this.base = this.base.find({ ...searchword });
     return this;
   }
+
+  filter() {
+    const copyQ = { ...this.bigQ };
+
+    delete copyQ["search"];
+    delete copyQ["limit"];
+    delete copyQ["page"];
+
+    // convert bigQ into string => copyQ
+    let stringOfCopyQ = JSON.stringify(copyQ);
+    stringOfCopyQ = stringOfCopyQ.replace(
+      /\b(gte|lte|gt|lt)\b/g,
+      (m) => `$${m}`
+    );
+    const jsonOfCopyQ = JSON.parse(stringOfCopyQ);
+    thsi.base = this.base.find(jsonOfCopyQ);
+  }
   // Pager
 
   pager(resultPerPage) {
@@ -26,3 +43,5 @@ class WhereClause {
     return this;
   }
 }
+
+module.exports = WhereClause;
