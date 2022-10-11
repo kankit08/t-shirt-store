@@ -60,3 +60,25 @@ exports.getAllProducts = bigPromise(async (req, res, next) => {
     filteredProductNumber,
   });
 });
+
+exports.adminGetAllProucts = bigPromise(async (req, res, next) => {
+  const products = await Product.find();
+
+  res.status(200).json({
+    success: true,
+    products,
+  });
+});
+
+exports.getOneProduct = bigPromise(async (req, res, next) => {
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return next(new customError("No product found with this id", 401));
+  }
+
+  res.status(200).json({
+    success: true,
+    product,
+  });
+});
