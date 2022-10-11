@@ -29,7 +29,8 @@ class WhereClause {
       (m) => `$${m}`
     );
     const jsonOfCopyQ = JSON.parse(stringOfCopyQ);
-    thsi.base = this.base.find(jsonOfCopyQ);
+    this.base = this.base.find(jsonOfCopyQ);
+    return this;
   }
   // Pager
 
