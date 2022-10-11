@@ -82,3 +82,71 @@ exports.getOneProduct = bigPromise(async (req, res, next) => {
     product,
   });
 });
+
+exports.adminUpdateOneProduct = bigPromise(async (req, res, next) => {
+  let product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return next(new customError("No product found with this id", 401));
+  }
+
+  let imagesArray = [];
+
+  if (req.files) {
+    // remove the image
+
+    for (let index = 0; index < product.photos.length; index++) {
+      const res = await cloudinary.v2.uploader.destroy(
+        product.photos[index].id
+      );
+    }
+
+    // upload and save the new image:
+
+    for (let index = 0; index < req.files.photos.length; index++) {
+      let result = await cloudinary.v2.uploader.upload(
+        req.files.photos[index].tempFilePath,
+        {
+          folder: "products",
+        }
+      );
+      imagesArray.push({
+        id: result.public_id,
+        secure_url: result.secure_url,
+      });
+    }
+  }
+
+  req.body.photos = imagesArray;
+
+  product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  res.status(200).json({
+    success: true,
+    product,
+  });
+});
+
+exports.adminDeleteOneProduct = bigPromise(async (req, res, next) => {
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return next(new customError("No product found with this id", 401));
+  }
+
+  // destroy existing photo
+  for (let index = 0; index < product.photos.length; index++) {
+    const res = await cloudinary.v2.uploader.destroy(product.photos[index].id);
+  }
+
+  await product.remove();
+
+  res.status(200).json({
+    success: true,
+    message: "Product Deleted !!!",
+  });
+});
