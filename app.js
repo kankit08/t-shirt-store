@@ -43,11 +43,13 @@ app.use(express.urlencoded({ extended: true }));
 const home = require("./routes/home");
 const user = require("./routes/user");
 const product = require("./routes/product");
+const payment = require("./routes/payment");
 
 // router middleware
 app.use("/api/v1", home);
 app.use("/api/v1", user);
 app.use("/api/v1", product);
+app.use("/api/v1", payment);
 
 // temporary route
 app.get("/signuptest", (req, res) => {
