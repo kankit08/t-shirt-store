@@ -1,0 +1,25 @@
+{
+  "shippingInfo": {
+    "address": "45/2, Round Street",
+    "city": "Delhi",
+    "phoneNo": "9898989898",
+    "postalCode": "110011",
+    "state": "New Delhi",
+    "country": "India"
+  },
+  "orderItems": [
+    {
+      "name": "Pro Coder tshirts",
+      "quantity": 1,
+      "image": "https://res.cloudinary.com/dkshf6k6l/image/upload/v1665513224/products/ylqixqp0zvp4g9g0qrry.jpg",
+      "price": 999,
+      "product": "617facb5333fd4c0fdfdee65"
+    }
+  ],
+  "paymentInfo": {
+    "id": "testString"
+  },
+  "taxAmount": 30,
+  "shippingAmount": 20,
+  "totalAmount": 100
+}
