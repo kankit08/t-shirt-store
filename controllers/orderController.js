@@ -83,6 +83,16 @@ exports.adminUpdateOrder = bigPromise(async (req, res, next) => {
   });
 });
 
+exports.adminDeleteOrder = bigPromise(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+
+  await order.remove();
+
+  res.status(200).json({
+    success: true,
+  });
+});
+
 const updateProductStock = async (productId, quatity) => {
   const product = await product.findById(productId);
   product.stock = product.stock - quatity;
