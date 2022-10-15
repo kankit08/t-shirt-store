@@ -52,3 +52,39 @@ exports.getLoggedInOrder = bigPromise(async (req, res, next) => {
     order,
   });
 });
+
+exports.adminGetAllOrders = bigPromise(async (req, res, next) => {
+  const orders = await Order.find();
+
+  res.status(200).json({
+    success: true,
+    orders,
+  });
+});
+
+exports.adminUpdateOrder = bigPromise(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order.orderStatus === "Delivered") {
+    return next(new customError("Order is alreday marked as Delivered", 401));
+  }
+
+  order.orderStatus = req.body.orderStatus;
+
+  order.orderItems.forEach(async (prod) => {
+    await updateProductStock(prod.product, prod.quantity);
+  });
+
+  await order.save();
+
+  res.status(200).json({
+    success: true,
+    order,
+  });
+});
+
+const updateProductStock = async (productId, quatity) => {
+  const product = await product.findById(productId);
+  product.stock = product.stock - quatity;
+  await product.save({ validateBeforeSave: false });
+};
