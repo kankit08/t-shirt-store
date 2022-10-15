@@ -30,11 +30,7 @@ exports.createOrder = bigPromise(async (req, res, next) => {
 });
 
 exports.getOneOrder = bigPromise(async (req, res, next) => {
-  const order = await Order.findById(req.params.id).populate(
-    "user",
-    "name email"
-  );
-
+  const order = await Order.findById(req.params.id);
   if (!order) {
     return next(new customError("Please check order id", 401));
   }
